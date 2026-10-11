@@ -20,8 +20,9 @@ jobs:
         with:
           gradle-version: 8.14
       - name: Build
+        working-directory: mod
         run: gradle build -Pmc=${{ matrix.mc }}
       - uses: actions/upload-artifact@v4
         with:
           name: blade-client-${{ matrix.mc }}
-          path: build/libs/*+${{ matrix.mc }}.jar
+          path: mod/build/libs/*+${{ matrix.mc }}.jar
