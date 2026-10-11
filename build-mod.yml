@@ -1,0 +1,28 @@
+name: Build Blade mod
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ['1.21.11', '1.21.4', '1.21.1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.14
+      - name: Build
+        working-directory: mod
+        run: gradle build -Pmc=${{ matrix.mc }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blade-client-${{ matrix.mc }}
+          path: mod/build/libs/*+${{ matrix.mc }}.jar
